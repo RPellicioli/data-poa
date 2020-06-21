@@ -3,11 +3,15 @@ import { ApiBase } from './api-base';
 import { environment } from 'src/environments/environment';
 
 @Injectable()
-export class ApiLinesService extends ApiBase {
+export class ApiDataPOAService extends ApiBase {
     protected apiBaseUrl: string = environment.apiUrl;
-    protected routePath: string = 'process.php?a=nc&p=%25&t=o';
+    protected routePath: string = 'process.php';
 
     public getLines(): Promise<any> {
-        return super.get<any>('');
+        return super.get<any>('?a=nc&p=%25&t=o');
+    }
+
+    public getBus(): Promise<any> {
+        return super.get<any>('?a=nc&p=%25&t=l');
     }
 }

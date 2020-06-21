@@ -4,7 +4,6 @@ import { AppComponent } from './app.component';
 import { CaseInsensitiveMatcher } from './utils/case-insensitive-matcher';
 import { Route } from '@angular/compiler/src/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ApiModule } from './services/api/api.module';
 
 export const commonRoutes: Routes = [
   <Route>{
@@ -21,7 +20,6 @@ export const commonRoutes: Routes = [
   ],
   imports: [
     BrowserModule,
-    ApiModule,
     RouterModule.forRoot(commonRoutes)
   ],
   providers: [],

@@ -1,14 +1,18 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { HomeComponent } from './home.component';
+import { HomeModule } from './home.module';
+import { ApiModule } from 'src/app/services/api/api.module';
 
-describe('LineHomeComponentsComponent', () => {
+describe('HomeComponent', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [HomeComponent]
+      imports: [
+        HomeModule,
+        ApiModule
+      ]
     })
       .compileComponents();
   }));
@@ -19,7 +23,7 @@ describe('LineHomeComponentsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create the component', () => {
     expect(component).toBeTruthy();
   });
 });

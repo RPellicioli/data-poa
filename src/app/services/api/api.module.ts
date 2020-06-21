@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { HttpClientModule, HttpClientJsonpModule } from "@angular/common/http";
-import { ApiLinesService } from './api-lines.service';
+import { ApiDataPOAService } from './api-data-poa.service';
 
 @NgModule({
     imports: [
@@ -8,7 +8,7 @@ import { ApiLinesService } from './api-lines.service';
         HttpClientJsonpModule
     ],
     providers: [
-        ApiLinesService
+        ApiDataPOAService
     ]
 })
 export class ApiModule { }
