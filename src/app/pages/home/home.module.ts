@@ -6,6 +6,7 @@ import { HomeComponent } from './home.component';
 import { LoadingModule } from 'src/app/components/loading/loading.module';
 import { HeaderModule } from 'src/app/components/header/header.module';
 import { FilterPipe } from 'src/app/pipes/filter';
+import { ApiModule } from 'src/app/services/api/api.module';
 
 @NgModule({
     imports: [
@@ -13,6 +14,7 @@ import { FilterPipe } from 'src/app/pipes/filter';
         LoadingModule,
         HeaderModule,
         FormsModule,
+        ApiModule,
         RouterModule.forChild([
             { path: '', component: HomeComponent }
         ])
