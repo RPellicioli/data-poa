@@ -1,0 +1,55 @@
+<app-header></app-header>
+
+<section class="content">
+    <div class="default-view-container">
+        <div class="card col-xl-4 col-lg-6 col-md-12 col-sm-12 shadow border-0 p-3 bg-white rounded">
+            <loading *ngIf="isLoading"></loading>
+
+            <div class="header">
+                <ul class="nav nav-tabs w-100">
+                    <li class="nav-item">
+                        <a class="nav-link active">Linhas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link">Lotações</a>
+                    </li>
+                </ul>
+
+                <p class="card-text mt-4">Encontre a linha para visualizar seu itinerário.</p>
+
+                <div class="input-group">
+                    <input type="text" class="form-control" [(ngModel)]="search" placeholder="Buscar linha"
+                        aria-label="Buscar linha" aria-describedby="basic-addon2">
+
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button">
+                            <svg class="bi bi-search" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z" />
+                                <path fill-rule="evenodd"
+                                    d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="list-group mt-3 w-100">
+                <li class="list-group-item"
+                    *ngFor="let line of lines | filter:{ codigo: search, nome: search } : false">
+
+                    <div class="wrap col-2 p-0">
+                        <label class="m-0">Código</label>
+                        <span>{{line.codigo}}</span>
+                    </div>
+
+                    <div class="wrap col-10">
+                        <label class="m-0">Nome</label>
+                        <span>{{line.nome}}</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>

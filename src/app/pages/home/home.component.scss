@@ -1,0 +1,67 @@
+@import '../../../styles/colors';
+@import '../../../styles/fonts';
+
+:host{
+    .content{
+        width: 100%;
+        height: calc(100vh - 76px);
+        display: flex;
+        align-items: center;
+
+        @media only screen and (max-width: 768px) {
+            height: calc(100vh - 50px);
+        }
+
+        .card{
+            height: 80vh;
+            position: relative;
+
+            .header{
+                .nav{
+                    .active{
+                        color: $violet;
+                        font-weight: $font-weight-bold;
+                    }
+                }
+
+                .card-text{
+                    margin-bottom: 8px;
+                    color: $dark-grey;
+                }
+                
+                .input-group{
+                    .form-control{
+                        height: 50px;
+                    }
+
+                    .input-group-append{
+                        .btn{
+                            display: flex;
+                            align-items: center;
+                        }
+                    }
+                }
+            }
+
+            .list-group{
+                height: calc(100% - 135px);
+                overflow-y: auto;
+
+                .list-group-item{
+                    display: flex;
+                    align-items: center;
+
+                    .wrap {
+                        display: flex;
+                        flex-direction: column;
+                        
+                        label{
+                            font-size: .8rem;
+                            color: $text-grey;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

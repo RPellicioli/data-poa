@@ -9,10 +9,10 @@ import { ApiModule } from './services/api/api.module';
 export const commonRoutes: Routes = [
   <Route>{
     matcher: CaseInsensitiveMatcher.matcher,
-    matcherPath: 'linhas',
-    loadChildren: () => import('./pages/lines/lines.module').then(m => m.LinesModule)
+    matcherPath: 'home',
+    loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule)
   },
-  { path: '**', loadChildren: () => import('./pages/lines/lines.module').then(m => m.LinesModule) }
+  { path: '**', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) }
 ];
 
 @NgModule({
