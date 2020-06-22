@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ApiDataPOAService } from 'src/app/services/api/api-data-poa.service';
-import { GoogleMapsUtils } from 'src/app/utils/google-maps-utils';
 import { Line } from 'src/app/models/line';
+import { Direction, WayPoint } from 'src/app/models/direction';
 
 @Component({
     selector: 'home',
@@ -9,16 +9,15 @@ import { Line } from 'src/app/models/line';
     styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-    @ViewChild('mapElement', { static: true }) public mapElement: ElementRef<HTMLDivElement>;
-    private map: google.maps.Map;
-
+    public text: string;
+    public placeholder: string;
     public lines: Line[];
     public isLoading: boolean;
     public search: string;
 
     public navs: HomeComponent.Nav[] = [
         {
-            name: "Linhas",
+            name: "Ônibus",
             active: true
         },
         {
@@ -27,13 +26,19 @@ export class HomeComponent implements OnInit {
         }
     ];
 
+    //Map Config
+    public origin: Direction;
+    public destination: Direction;
+    public waypoints: WayPoint[] = [];
+    public showDirection: boolean = true;
+    public zoom: number = 12;
+
     constructor(
         private apiDataPOAService: ApiDataPOAService
     ) { }
 
     public ngOnInit(): void {
-        this.loadLines();
-        this.createMap();
+        this.loadBus();
     }
 
     public selectNav(nav: HomeComponent.Nav): void {
@@ -43,33 +48,74 @@ export class HomeComponent implements OnInit {
         this.reset();
 
         switch (nav.name) {
-            case 'Linhas':
-                this.loadLines();
-                break;
-            case 'Lotações':
+            case 'Ônibus':
                 this.loadBus();
                 break;
+            case 'Lotações':
+                this.loadStocking();
+                break;
         }
+    }
+
+    public async selectLine(line: Line): Promise<void> {
+        this.lines.forEach(n => n.active = false);
+        line.active = true;
+
+        const directions = await this.apiDataPOAService.getLineDirections(line.id);   
+
+        this.origin = {
+            lat: directions[0].lat,
+            lng: directions[0].lng
+        }
+
+        this.waypoints = [];
+
+        // ESTE SERIA O CÓDIGO CORRETO, PORÉM A API GRÁTIS DO GOOGLE ACEITA NO MÁXIMO 25 WAYPOINTS PARA MONTAR A ROTA, ENTÃO TIVE QUE FAZER A GAMBIARRA A BAIXO
+        // directions.forEach((d, index) => {
+        //     if(index > 0 && index < directions.length -1){
+        //         let wp = {
+        //             location: {
+        //                 lat: d.lat,
+        //                 lng: d.lng
+        //             }
+        //         }
+
+        //         this.waypoints.push(wp);
+        //     }
+        // });
+
+        // O CÓDIGO CORRETO PARA UMA API PAGA ESTÁ ACIMA, ESTE É APENAS UM EXEMPLO PARA "FUNCIONAR"
+        for(let i = 1; i < directions.length - 1; i*2){
+            let wp = {
+                location: {
+                    lat: directions[i].lat,
+                    lng: directions[i].lng
+                }
+            }
+
+            this.waypoints.push(wp);
+
+            if(this.waypoints.length > 24){
+                break;
+            }
+        }
+
+        this.destination = {
+            lat: directions[directions.length - 1].lat,
+            lng: directions[directions.length - 1].lng
+        }
+
+        this.showDirection = true;
     }
 
     private reset(): void {
         this.search = "";
     }
 
-    private async loadLines(): Promise<void> {
-        this.isLoading = true;
-
-        try {
-            this.lines = await this.apiDataPOAService.getLines();
-            this.isLoading = false;
-        } catch (error) {
-            this.isLoading = false;
-            console.error(error);
-        }
-    }
-
     private async loadBus(): Promise<void> {
         this.isLoading = true;
+        this.text = "seu ônibus";
+        this.placeholder = "Buscar ônibus";
 
         try {
             this.lines = await this.apiDataPOAService.getBus();
@@ -80,36 +126,19 @@ export class HomeComponent implements OnInit {
         }
     }
 
-    private async createMap(): Promise<void> {
-		try {
-            await GoogleMapsUtils.loadScript();
-            
-            const initialLatitude = -30.0430627;
-            const initialLongitude = -51.1579254;
+    private async loadStocking(): Promise<void> {
+        this.isLoading = true;
+        this.text = "sua lotação";
+        this.placeholder = "Buscar lotação";
 
-			if (this.mapElement) {
-				const options: google.maps.MapOptions = {
-					draggable: true,
-					scrollwheel: true,
-					disableDoubleClickZoom: false,
-					disableDefaultUI: true,
-					zoomControl: true,
-					mapTypeControlOptions: {
-						mapTypeIds: ['Styled']
-					},
-					center: new google.maps.LatLng(Number(initialLatitude), Number(initialLongitude)),
-					zoom: 13,
-					mapTypeId: google.maps.MapTypeId.ROADMAP
-				};
-
-				this.map = new google.maps.Map(this.mapElement.nativeElement, options);
-				this.map.mapTypes.set('Styled', new google.maps.StyledMapType(GoogleMapsUtils.getDefaultStyles(), { name: 'Styled' }));
-			}
-		}
-		catch (ex) {
-			console.log(ex);
-		}
-	}
+        try {
+            this.lines = await this.apiDataPOAService.getStocking();
+            this.isLoading = false;
+        } catch (error) {
+            this.isLoading = false;
+            console.error(error);
+        }
+    }
 }
 
 export namespace HomeComponent {

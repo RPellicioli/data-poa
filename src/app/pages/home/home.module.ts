@@ -7,6 +7,7 @@ import { LoadingModule } from 'src/app/components/loading/loading.module';
 import { HeaderModule } from 'src/app/components/header/header.module';
 import { FilterPipe } from 'src/app/pipes/filter';
 import { ApiModule } from 'src/app/services/api/api.module';
+import { MapModule } from 'src/app/components/map/map.module';
 
 @NgModule({
     imports: [
@@ -15,6 +16,7 @@ import { ApiModule } from 'src/app/services/api/api.module';
         HeaderModule,
         FormsModule,
         ApiModule,
+        MapModule,
         RouterModule.forChild([
             { path: '', component: HomeComponent }
         ])

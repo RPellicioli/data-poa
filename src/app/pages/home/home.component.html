@@ -12,11 +12,10 @@
                     </li>
                 </ul>
 
-                <p class="card-text mt-4">Encontre a linha para visualizar seu itinerário.</p>
+                <p class="card-text mt-4">Encontre {{text}} para visualizar o itinerário.</p>
 
                 <div class="input-group">
-                    <input type="text" class="form-control" [(ngModel)]="search" placeholder="Buscar linha"
-                        aria-label="Buscar linha" aria-describedby="basic-addon2">
+                    <input type="text" class="form-control" [(ngModel)]="search" [placeholder]="placeholder">
 
                     <div class="input-group-append">
                         <button class="btn btn-primary" type="button">
@@ -34,7 +33,9 @@
 
             <ul class="list-group mt-3 w-100">
                 <li class="list-group-item list-group-item-action pointer"
-                    *ngFor="let line of lines | filter:{ codigo: search, nome: search } : false">
+                    *ngFor="let line of lines | filter:{ codigo: search, nome: search } : false"
+                    [ngClass]="{'active': line.active}"
+                    (click)="selectLine(line)">
 
                     <div class="wrap col-2 p-0">
                         <label class="m-0">Código</label>
@@ -49,6 +50,12 @@
             </ul>
         </div>
 
-        <div class="map shadow border-0 rounded" #mapElement></div>
+        <div class="map shadow border-0 rounded">
+            <map [showDirection]="showDirection"
+                [origin]="origin"
+                [destination]="destination"
+                [waypoints]="waypoints"
+                [zoom]="zoom"></map>
+        </div>
     </div>
 </section>
