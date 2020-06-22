@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ApiDataPOAService } from 'src/app/services/api/api-data-poa.service';
+import { GoogleMapsUtils } from 'src/app/utils/google-maps-utils';
 import { Line } from 'src/app/models/line';
 
 @Component({
@@ -8,6 +9,9 @@ import { Line } from 'src/app/models/line';
     styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+    @ViewChild('mapElement', { static: true }) public mapElement: ElementRef<HTMLDivElement>;
+    private map: google.maps.Map;
+
     public lines: Line[];
     public isLoading: boolean;
     public search: string;
@@ -29,6 +33,7 @@ export class HomeComponent implements OnInit {
 
     public ngOnInit(): void {
         this.loadLines();
+        this.createMap();
     }
 
     public selectNav(nav: HomeComponent.Nav): void {
@@ -74,6 +79,37 @@ export class HomeComponent implements OnInit {
             console.error(error);
         }
     }
+
+    private async createMap(): Promise<void> {
+		try {
+            await GoogleMapsUtils.loadScript();
+            
+            const initialLatitude = -30.0430627;
+            const initialLongitude = -51.1579254;
+
+			if (this.mapElement) {
+				const options: google.maps.MapOptions = {
+					draggable: true,
+					scrollwheel: true,
+					disableDoubleClickZoom: false,
+					disableDefaultUI: true,
+					zoomControl: true,
+					mapTypeControlOptions: {
+						mapTypeIds: ['Styled']
+					},
+					center: new google.maps.LatLng(Number(initialLatitude), Number(initialLongitude)),
+					zoom: 13,
+					mapTypeId: google.maps.MapTypeId.ROADMAP
+				};
+
+				this.map = new google.maps.Map(this.mapElement.nativeElement, options);
+				this.map.mapTypes.set('Styled', new google.maps.StyledMapType(GoogleMapsUtils.getDefaultStyles(), { name: 'Styled' }));
+			}
+		}
+		catch (ex) {
+			console.log(ex);
+		}
+	}
 }
 
 export namespace HomeComponent {

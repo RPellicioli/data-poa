@@ -8,58 +8,82 @@
         display: flex;
         align-items: center;
 
-        @media only screen and (max-width: 768px) {
-            height: calc(100vh - 50px);
+        @media only screen and (max-width: 960px) {
+            height: auto;
         }
 
-        .card{
-            height: 80vh;
-            position: relative;
+        .default-view-container{
+            display: flex;
 
-            .header{
-                .nav{
-                    .active{
-                        color: $violet;
-                        font-weight: $font-weight-bold;
+            @media only screen and (max-width: 960px) {
+                flex-direction: column;
+            }
+
+            .card{
+                height: 80vh;
+                position: relative;
+    
+                .header{
+                    .nav{
+                        .active{
+                            color: $violet;
+                            font-weight: $font-weight-bold;
+                        }
+                    }
+    
+                    .card-text{
+                        margin-bottom: 8px;
+                        color: $dark-grey;
+                    }
+                    
+                    .input-group{
+                        .form-control{
+                            height: 50px;
+                        }
+    
+                        .input-group-append{
+                            .btn{
+                                display: flex;
+                                align-items: center;
+                            }
+                        }
                     }
                 }
-
-                .card-text{
-                    margin-bottom: 8px;
-                    color: $dark-grey;
-                }
-                
-                .input-group{
-                    .form-control{
-                        height: 50px;
-                    }
-
-                    .input-group-append{
-                        .btn{
+    
+                .list-group{
+                    height: calc(100% - 135px);
+                    overflow-y: auto;
+    
+                    .list-group-item{
+                        display: flex;
+                        align-items: center;
+                        
+                        .wrap {
                             display: flex;
-                            align-items: center;
+                            flex-direction: column;
+                            
+                            label{
+                                font-size: .8rem;
+                                color: $text-grey;
+                            }
                         }
                     }
                 }
             }
 
-            .list-group{
-                height: calc(100% - 135px);
-                overflow-y: auto;
+            .map{
+                height: 80vh;
+                margin-left: 24px;
+                flex: 1;
+                position: relative;
 
-                .list-group-item{
-                    display: flex;
-                    align-items: center;
-                    
-                    .wrap {
-                        display: flex;
-                        flex-direction: column;
-                        
-                        label{
-                            font-size: .8rem;
-                            color: $text-grey;
-                        }
-                    }
+                @media only screen and (max-width: 960px) {
+                    margin: 24px 0 0;
+                    height: 500px;
+                }
+
+                @media only screen and (max-width: 768px) {
+                    height: 350px;
                 }
             }
         }
