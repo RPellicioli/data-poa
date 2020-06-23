@@ -31,7 +31,7 @@
                 </div>
             </div>
 
-            <ul class="list-group mt-3 w-100">
+            <ul class="list-group line-list mt-3 w-100">
                 <li class="list-group-item list-group-item-action pointer"
                     *ngFor="let line of lines | filter:{ codigo: search, nome: search } : false"
                     [ngClass]="{'active': line.active}"
