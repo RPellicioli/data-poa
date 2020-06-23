@@ -11,7 +11,7 @@ import { Direction, WayPoint } from 'src/app/models/direction';
 export class HomeComponent implements OnInit {
     public text: string;
     public placeholder: string;
-    public lines: Line[];
+    public lines: Line[] = [];
     public isLoading: boolean;
     public search: string;
 
@@ -61,7 +61,11 @@ export class HomeComponent implements OnInit {
         this.lines.forEach(n => n.active = false);
         line.active = true;
 
-        const directions = await this.apiDataPOAService.getLineDirections(line.id);   
+        const directions = await this.apiDataPOAService.getLineDirections(line.id);
+        
+        if(!directions || directions.length === 0){
+            alert("Nenhum itinerário encontrato para esta linha.");
+        }
 
         this.origin = {
             lat: directions[0].lat,
@@ -70,7 +74,7 @@ export class HomeComponent implements OnInit {
 
         this.waypoints = [];
 
-        // ESTE SERIA O CÓDIGO CORRETO, PORÉM A API GRÁTIS DO GOOGLE ACEITA NO MÁXIMO 25 WAYPOINTS PARA MONTAR A ROTA, ENTÃO TIVE QUE FAZER A GAMBIARRA A BAIXO
+        // ESTE SERIA O CÓDIGO CORRETO, PORÉM A API GRÁTIS DO GOOGLE ACEITA NO MÁXIMO 25 WAYPOINTS PARA MONTAR A ROTA, ENTÃO TIVE QUE FAZER A GAMBIARRA ABAIXO
         // directions.forEach((d, index) => {
         //     if(index > 0 && index < directions.length -1){
         //         let wp = {
@@ -84,7 +88,7 @@ export class HomeComponent implements OnInit {
         //     }
         // });
 
-        // O CÓDIGO CORRETO PARA UMA API PAGA ESTÁ ACIMA, ESTE É APENAS UM EXEMPLO PARA "FUNCIONAR"
+        // O CÓDIGO CORRETO PARA UMA CONTA GOOGLE MAPS PAGA ESTÁ ACIMA, ESTE É APENAS UM EXEMPLO PARA "FUNCIONAR"
         for(let i = 1; i < directions.length - 1; i*2){
             let wp = {
                 location: {
@@ -112,7 +116,7 @@ export class HomeComponent implements OnInit {
         this.search = "";
     }
 
-    private async loadBus(): Promise<void> {
+    public async loadBus(): Promise<void> {
         this.isLoading = true;
         this.text = "seu ônibus";
         this.placeholder = "Buscar ônibus";
@@ -123,10 +127,11 @@ export class HomeComponent implements OnInit {
         } catch (error) {
             this.isLoading = false;
             console.error(error);
+            alert("Erro ao carregar a lista de ônibus, tente mais tarde.");
         }
     }
 
-    private async loadStocking(): Promise<void> {
+    public async loadStocking(): Promise<void> {
         this.isLoading = true;
         this.text = "sua lotação";
         this.placeholder = "Buscar lotação";
@@ -137,6 +142,7 @@ export class HomeComponent implements OnInit {
         } catch (error) {
             this.isLoading = false;
             console.error(error);
+            alert("Erro ao carregar a lista de lotações, tente mais tarde.");
         }
     }
 }

@@ -24,7 +24,12 @@ export class ApiDataPOAService extends ApiBase {
         delete it.nome;
         delete it.codigo;
 
-        const result = Object.keys(it).map(key => ({type: key, value: it[key]}));
+        const result = Object.keys(it).map(key => (
+            {
+                type: key, 
+                value: it[key]
+            }
+        ));
 
         let directions: Direction[] = [];
 
