@@ -74,35 +74,19 @@ export class HomeComponent implements OnInit {
 
         this.waypoints = [];
 
-        // ESTE SERIA O CÓDIGO CORRETO, PORÉM A API GRÁTIS DO GOOGLE ACEITA NO MÁXIMO 25 WAYPOINTS PARA MONTAR A ROTA, ENTÃO TIVE QUE FAZER A GAMBIARRA ABAIXO
-        // directions.forEach((d, index) => {
-        //     if(index > 0 && index < directions.length -1){
-        //         let wp = {
-        //             location: {
-        //                 lat: d.lat,
-        //                 lng: d.lng
-        //             }
-        //         }
-
-        //         this.waypoints.push(wp);
-        //     }
-        // });
-
-        // O CÓDIGO CORRETO PARA UMA CONTA GOOGLE MAPS PAGA ESTÁ ACIMA, ESTE É APENAS UM EXEMPLO PARA "FUNCIONAR"
-        for(let i = 1; i < directions.length - 1; i*2){
-            let wp = {
-                location: {
-                    lat: directions[i].lat,
-                    lng: directions[i].lng
+        directions.forEach((d, index) => {
+            // AO UTILIZAR UMA CONTA/KEY GOOGLE MAPS PAGA RETIRAR O INDEX < 25, POIS EM UMA CONTA GRATIS O LIMETE É DE 25 WAYPOINTS DESENHADOS NO MAPA
+            if(index > 0 && index < directions.length -1 && index < 25){
+                let wp = {
+                    location: {
+                        lat: d.lat,
+                        lng: d.lng
+                    }
                 }
-            }
 
-            this.waypoints.push(wp);
-
-            if(this.waypoints.length > 24){
-                break;
+                this.waypoints.push(wp);
             }
-        }
+        });
 
         this.destination = {
             lat: directions[directions.length - 1].lat,
